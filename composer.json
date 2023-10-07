@@ -1,0 +1,11 @@
+{
+    "name": "tahmid-khan/xjudge",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Tahmid A. Khan",
+            "email": "tahmidkhan@proton.me"
+        }
+    ],
+    "require": {}
+}
