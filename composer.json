@@ -9,7 +9,8 @@
     ],
     "require": {
         "php": ">=8.2",
+        "ext-mbstring": "*",
         "ext-pdo_mysql": "*",
         "voku/simple_html_dom": "^4.8"
-    } 
+    }
 }

@@ -16,6 +16,7 @@ $router->register_get('/help', controller: 'help.php');
 $router->register_get('/contests', controller: 'contests/index.php');
 $router->register_get('/contests/create', controller: 'contests/create-form.php');
 $router->register_post('/contests/create', controller: 'contests/create.php');
+$router->register_get('/contests/:id', controller: 'contests/show.php');
 
 $router->register_get('/register', controller: 'accounts/create-form.php');
 $router->register_post('/register', controller: 'accounts/create.php');
