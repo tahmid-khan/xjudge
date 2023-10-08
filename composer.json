@@ -7,5 +7,9 @@
             "email": "tahmidkhan@proton.me"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">=8.2",
+        "ext-pdo_mysql": "*",
+        "voku/simple_html_dom": "^4.8"
+    } 
 }
