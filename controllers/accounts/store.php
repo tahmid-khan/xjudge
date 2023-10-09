@@ -1,7 +1,5 @@
 <?php
 
-require_auth('You must be logged in to access that page.');
-
 $username = $_POST['username'];
 $email = $_POST['email'];
 $password = $_POST['password'];
@@ -27,7 +25,7 @@ if (!$password) {
     $errors['password'] = 'Password must be at least 8 characters long';
 }
 if (!empty($errors)) {
-    view('accounts/show.view.php', ['errors' => $errors]);
+    view('accounts/create.view.php', ['errors' => $errors]);
     die();
 }
 
@@ -44,16 +42,15 @@ if ($user) {
     $errors['email'] = 'Email already exists';
 }
 if (!empty($errors)) {
-    view('accounts/show.view.php', ['errors' => $errors]);
+    view('accounts/create.view.php', ['errors' => $errors]);
     die();
 }
 
-// update the user record
-$db->query('UPDATE user SET username = :u, email = :e, password = :p WHERE id = :id', [
+// create the user
+$db->query('INSERT INTO user (username, email, password) VALUES (:u, :e, :p)', [
     'u' => $username,
     'e' => $email,
     'p' => password_hash($password, PASSWORD_DEFAULT),
-    'id' => $_SESSION['user_id'],
 ]);
 
 if ($db->is_success()) {

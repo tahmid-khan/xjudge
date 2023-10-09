@@ -17,8 +17,8 @@
             <h1>Contests</h1>
             <ul>
                 <?php foreach ($contests as $contest) : ?>
-                    <li><?= $contest->name ?></li>
-                <?php endforeach ?>
+                    <li><?= $contest['name'] ?></li>
+                <?php endforeach; ?>
             </ul>
         </main>
     </nav>

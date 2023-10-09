@@ -59,4 +59,9 @@ class Database
     {
         return $this->connection->lastInsertId();
     }
+
+    public function error(): array
+    {
+        return $this->statement->errorInfo();
+    }
 }

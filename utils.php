@@ -13,7 +13,7 @@ function dd($value): void
     die();
 }
 
-function private_path(string $path): string
+function path_from_base(string $path): string
 {
     return BASE_PATH . $path;
 }
@@ -41,4 +41,14 @@ function connect_db(): Database
 function html_to_sql_time(string $html_datetime): string
 {
     return str_replace('T', ' ', $html_datetime);
+}
+
+function require_auth(string $message, string $redirect_path = '/login'): void
+{
+    if (!isset($_SESSION['user_id'])) {
+        http_response_code(StatusCode::UNAUTHORIZED_401);
+        $_SESSION['auth_error'] = $message;
+        header("Location: $redirect_path");
+        die();
+    }
 }
