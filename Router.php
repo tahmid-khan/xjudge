@@ -70,8 +70,8 @@ function matched_params(string $path, string $route): false|array
                 $param_end = $route_len;
             }
 
-            $name = mb_substr($route, $i, $param_end - $i);
-            $value = mb_substr($path, $j, $arg_end - $j);
+            $name = mb_substr($route, start: $i + 1, length: $param_end - ($i + 1));
+            $value = mb_substr($path, start: $j, length: $arg_end - $j);
             $params[$name] = $value;
 
             $i = $param_end;
