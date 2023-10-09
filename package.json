@@ -1,0 +1,6 @@
+{
+  "name": "xjudge",
+  "dependencies": {
+    "@zoon/puphpeteer": "github:zoonru/puphpeteer"
+  }
+}
