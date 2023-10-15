@@ -64,7 +64,7 @@ foreach ($problem_ids as $index => $prob_id) {
         store_problem_in_db($parts);
     }
 
-    $db->query('INSERT INTO contest_problem (contest_id, ordinal_letter, problem_id) VALUES (:c, :l, :p)', [
+    $db->query('INSERT INTO contest_problem (contest_id, problem_index, problem_id) VALUES (:c, :l, :p)', [
         'c' => $contest_id,
         'l' => chr(ord('A') + $index),
         'p' => $prob_id,

@@ -23,7 +23,7 @@
                                     <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">User</th>
                                 <?php foreach ($problems as $problem) : ?>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        <a href="<?= "/contests/{$contest['id']}/problems/{$problem['ordinal_letter']}" ?>"><?= $problem['ordinal_letter'] ?></a>
+                                        <a href="<?= "/contests/{$contest['id']}/problems/{$problem['problem_index']}" ?>"><?= $problem['problem_index'] ?></a>
                                     </th>
                                 <?php endforeach; ?>
                                 </tr>
@@ -35,7 +35,7 @@
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><?= $users_names[$user_id] ?></td>
                                 <?php foreach ($problems as $problem) : ?>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        <?= in_array($problem['ordinal_letter'], $user_solves) ? '✅' : '' ?>
+                                        <?= in_array($problem['problem_index'], $user_solves) ? '✅' : '' ?>
                                     </td>
                                 <?php endforeach; ?>
                                 </tr>

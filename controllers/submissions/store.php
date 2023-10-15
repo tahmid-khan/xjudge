@@ -98,7 +98,7 @@ $source_code = $_POST['source-code'];
 
 $db = connect_db();
 $problem_id = $db->query(
-    'SELECT problem_id FROM contest_problem WHERE contest_id = ? AND ordinal_letter = ?',
+    'SELECT problem_id FROM contest_problem WHERE contest_id = ? AND problem_index = ?',
     [$contest_id, $problem_index]
 )->result()['problem_id'];
 
