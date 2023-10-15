@@ -47,4 +47,5 @@ if (!password_verify($password, $user['password'])) {
 // log the user in and redirect to home
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['username'] = $user['username'];
+$_SESSION['email'] = $user['email'];
 header('Location: /');

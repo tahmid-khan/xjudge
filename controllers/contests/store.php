@@ -2,43 +2,26 @@
 
 require_auth('You must be logged in to access this page.');
 
-use voku\helper\HtmlDomParser;
 global $db;
 
-function problem_not_in_db(string $prob_id): bool
+function problem_not_in_db(string $problem_id): bool
 {
     global $db;
     $res = $db
-        ->query('SELECT * FROM problem WHERE id = :id', ['id' => $prob_id])
+        ->query('SELECT * FROM problem WHERE id = ?', [$problem_id])
         ->all_results();
     return empty($res);
-}
-
-function fetch_problem(string $prob_id): false|array
-{
-    $url = "https://codeforces.com/problemset/problem/$prob_id";
-    $dom = HtmlDomParser::file_get_html($url);
-    if (!$dom) {
-        return false;
-    }
-
-    $title = $dom->findOne('.problem-statement')->findOne('.header > .title')->innerHtml();
-    $title = substr($title, strpos($title, '. ') + 2);
-    $text = $dom->findOne('.problemindexholder')->outerHtml();
-
-    return [
-        'id' => $prob_id,
-        'title' => $title,
-        'text' => $text,
-    ];
 }
 
 function store_problem_in_db(array $prob_parts): bool
 {
     global $db;
     return $db
-        ->query('INSERT INTO problem (id, title, text) VALUES (:id, :title, :text)', $prob_parts)
-        ->is_success();
+        ->query(
+            'INSERT INTO problem (id, title, time_limit, statement, input_spec, output_spec, samples)
+                                VALUES (:id, :title, :time_limit, :statement, :input_spec, :output_spec, :samples)',
+            $prob_parts
+        )->is_success();
 }
 
 
@@ -70,7 +53,7 @@ $contest_id = $db->last_insert_id();
 // add the problems to the contest
 foreach ($problem_ids as $index => $prob_id) {
     if (problem_not_in_db($prob_id)) {
-        $parts = fetch_problem($prob_id);
+        $parts = scrape_problem($prob_id);
         if (!$parts) {
             http_response_code(StatusCode::UNPROCESSABLE_CONTENT_422);
             view('contests/create.view.php', [

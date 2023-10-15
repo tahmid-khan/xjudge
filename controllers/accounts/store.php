@@ -57,6 +57,7 @@ if ($db->is_success()) {
     // log the user in and redirect to home
     $_SESSION['user_id'] = $db->last_insert_id();
     $_SESSION['username'] = $username;
+    $_SESSION['email'] = $user['email'];
     header('Location: /');
 } else {
     require 'StatusCode.php';

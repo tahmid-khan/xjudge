@@ -1,4 +1,4 @@
 <?php
 
 session_destroy();
-header('Location: /');
+redirect('/', 'Logged out successfully.');

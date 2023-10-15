@@ -9,12 +9,12 @@ class Router
         'POST' => [],
     ];
 
-    public function register_get(string $url_path, string $controller): void
+    public function map_get(string $url_path, string $controller): void
     {
         $this->routes_controllers['GET'][$url_path] = $controller;
     }
 
-    public function register_post(string $url_path, string $controller): void
+    public function map_post(string $url_path, string $controller): void
     {
         $this->routes_controllers['POST'][$url_path] = $controller;
     }

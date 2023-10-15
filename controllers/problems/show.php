@@ -6,13 +6,12 @@ $db = connect_db();
 
 $contest = $db->query('SELECT * FROM contest WHERE id = ?', [$contest_id])->result();
 if (!$contest) {
-    require 'StatusCode.php';
     abort(StatusCode::NOT_FOUND_404);
 }
 
 $problem_id = $db->query(
     'SELECT problem_id FROM contest_problem WHERE contest_id = ? AND ordinal_letter = ?',
-    [$contest_id, $problem_letter]
+    [$contest_id, $problem_index]
 )->result()['problem_id'];
 if (!$problem_id) {
     abort(StatusCode::NOT_FOUND_404);
@@ -25,6 +24,6 @@ if (!$problem) {
 
 view('problems/show.view.php', [
     'contest' => $contest,
-    'problem_letter' => $problem_letter,
+    'problem_index' => $problem_index,
     'problem' => $problem,
 ]);
