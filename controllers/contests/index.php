@@ -2,7 +2,10 @@
 
 $db = connect_db();
 
-$contests = $db->query('SELECT * FROM contest')->all_results();
+$name_contains = $_GET['name'] ?? '';
+$headless = array_key_exists('headless', $_GET);
+
+$contests = $db->query("SELECT * FROM contest WHERE name LIKE CONCAT('%', ?, '%')", [$name_contains])->all_results();
 
 foreach ($contests as $index => $contest) {
     $setter = $db->query('SELECT username FROM user WHERE id = ?', [$contest['setter_id']])->result()['username'];
@@ -17,4 +20,7 @@ foreach ($contests as $index => $contest) {
     $contests[$index]['duration'] = date('H:i', $duration);
 }
 
-view('contests/index.view.php', ['contests' => $contests]);
+view('contests/index.view.php', [
+    'contests' => $contests,
+    'headless' => $headless,
+]);

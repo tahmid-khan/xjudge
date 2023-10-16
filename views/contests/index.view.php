@@ -1,3 +1,5 @@
+<?php if (!$headless) : ?>
+
 <?php view('partials/head.php', ['page_title' => 'Contests — Xjudge']) ?>
 <?php view('partials/nav.php') ?>
 <?php view('partials/banner.php', ['banner_header' => 'Contests']) ?>
@@ -5,15 +7,22 @@
 <main>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div class="overflow-hidden bg-white shadow sm:rounded-md">
-            <ul role="list" class="divide-y divide-gray-200"><?php foreach ($contests as $contest) : ?>
-                <li>
-                    <a href="/contests/<?= $contest['id'] ?>" class="block hover:bg-gray-50">
+            <div>
+                <div class="border-b border-gray-300 focus-within:border-indigo-600">
+                    <input aria-label="Filter" title="Filter" type="search" name="filter" id="filter" class="block w-full border-0 border-b border-transparent bg-gray-50 focus:border-indigo-600 focus:ring-0 sm:text-sm" placeholder="Filter by name">
+                </div>
+            </div>
+
+            <ul role="list" id="contest-list" class="divide-y divide-gray-200">
+<?php endif; ?><?php foreach ($contests as $contest) : ?>
+                <li class="block hover:bg-gray-50">
+                    <a href="/contests/<?= $contest['id'] ?>">
                         <div class="px-4 py-4 sm:px-6">
                             <div class="flex items-center justify-between">
                                 <p class="truncate text-sm font-medium text-indigo-600"><?= $contest['name'] ?></p>
                                 <div class="ml-2 flex flex-shrink-0">
                                     <span class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 mr-3">Full-time</span>
-                                    
+
                                     <div class="mt-2 flex items-center text-sm sm:mt-0">
                                         <!-- Heroicon name: mini/calendar -->
                                         <svg class="mr-1.5 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -28,27 +37,45 @@
                             <div class="mt-2 sm:flex sm:justify-between">
                                 <div class="sm:flex">
                                     <p class="flex items-center text-sm text-gray-500">
-                                        <!-- Heroicon name: mini/users -->
-                                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z" />
+                                        <!-- Heroicon name: mini/user -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
                                         </svg>
                                         <?= $contest['setter'] ?>
                                     </p>
                                 </div>
                                 <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                                    <!-- Heroicon name: mini/map-pin -->
-<!--                                    <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">-->
-<!--                                        <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />-->
-<!--                                    </svg>-->
-                                    Duration <time><?= $contest['duration'] ?></time>
+                                    <!-- Heroicon name: mini/clock -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+                                    </svg>
+
+                                    <time><?= $contest['duration'] ?></time>
                                 </p>
                             </div>
                         </div>
                     </a>
                 </li>
-            <?php endforeach; ?></ul>
+<?php endforeach; ?><?php if (!$headless) : ?>
+            </ul>
+
+            <script>
+                const filter = document.getElementById('filter');
+                const list = document.querySelector('#contest-list');
+                filter.oninput = () => {
+                    list.innerHTML = '<li class="block"><div class="px-4 py-4 sm:px-6"><p class="text-sm text-gray-500" role="status">Loading ...</p></div></li>';
+                    const nameQuery = encodeURIComponent(filter.value);
+                    fetch(`/contests?name=${nameQuery}&headless`)
+                        .then(response => response.text())
+                        .then(html => {
+                            list.innerHTML = html;
+                        });
+                }
+            </script>
         </div>
     </div>
 </main>
 
 <?php view('partials/foot.php') ?>
+
+<?php endif; ?>
