@@ -36,42 +36,42 @@ class Router
     }
 }
 
-function matched_params(string $path, string $route): false|array
+function matched_params(string $url_path, string $route): false|array
 {
     $params = [];
 
     $route_len = mb_strlen($route);
-    $path_len = mb_strlen($path);
+    $url_len = mb_strlen($url_path);
     $i = 0;
     $j = 0;
 
     while ($i < $route_len) {
-        if ($j === $path_len) {
+        if ($j === $url_len) {
             if ($i != $route_len - 1 || $route[$i] != '/') {
                 return false;
             }
             break;
         }
 
-        if ($route[$i] != $path[$j]) {
+        if ($route[$i] != $url_path[$j]) {
             if ($route[$i] != ':') {
                 return false;
             }
 
             $param_end = mb_strpos($route, '/', $i);
-            $arg_end = mb_strpos($path, '/', $j);
+            $arg_end = mb_strpos($url_path, '/', $j);
             if ($arg_end === false) {
                 if ($param_end !== false && $param_end != $route_len - 1) {
                     return false;
                 }
-                $arg_end = $path_len;
+                $arg_end = $url_len;
             }
             if ($param_end === false) {
                 $param_end = $route_len;
             }
 
             $name = mb_substr($route, start: $i + 1, length: $param_end - ($i + 1));
-            $value = mb_substr($path, start: $j, length: $arg_end - $j);
+            $value = mb_substr($url_path, start: $j, length: $arg_end - $j);
             $params[$name] = $value;
 
             $i = $param_end;
@@ -82,7 +82,7 @@ function matched_params(string $path, string $route): false|array
         }
     }
 
-    if ($j != $path_len && ($j != $path_len - 1 || $path[$j] != '/')) {
+    if ($j != $url_len && ($j != $url_len - 1 || $url_path[$j] != '/')) {
         return false;
     }
 
