@@ -1,52 +1,39 @@
 <?php
 
-function menu_attrs(string $uri): string
+function menu_attrs(bool $is_selected): string
 {
-    $req_uri = $_SERVER['REQUEST_URI'];
-    if (($req_uri == '/' && $uri == '/') || ($req_uri != '/' && $uri != '/' && str_starts_with($req_uri, $uri))) {
-        return 'class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page"';
-    } else {
-        return 'class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"';
-    }
+    // Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
+    return $is_selected
+        ? 'class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page"'
+        : 'class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"';
 }
 
-function mobile_menu_attrs(string $uri): string
+function mobile_menu_attrs(bool $is_selected): string
 {
-    $req_uri = $_SERVER['REQUEST_URI'];
-    if (($req_uri == '/' && $uri == '/') || ($req_uri != '/' && $uri != '/' && str_starts_with($req_uri, $uri))) {
-        return 'class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page"';
-    } else {
-        return 'class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"';
-    }
+    // Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
+    return $is_selected
+        ? 'class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page"'
+        : 'class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"';
 }
 
 function if_signed_in_else(string $then_html, string $else_html)
 {
-    if (isset($_SESSION['user_id'])) {
-        return $then_html;
-    } else {
-        return $else_html;
-    }
+    return isset($_SESSION['user_id']) ? $then_html : $else_html;
 }
 
-?>
-<nav class="bg-gray-800">
+?><nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <img class="h-8 w-8"
-                         src="/images/logo.svg"
-                         alt="Xjudge Logo"
-                    >
+                    <a href="/"><img class="h-8 w-8" src="/images/logo.svg" alt="Xjudge Logo"></a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a href="/" <?= menu_attrs('/') ?>>Home</a>
-                        <a href="/contests" <?= menu_attrs('/contests') ?>>Contests</a>
-                        <a href="/about" <?= menu_attrs('/about') ?>>About</a>
-                        <a href="/help" <?= menu_attrs('/help') ?>>Help</a>
+                        <a href="/" <?= menu_attrs($current_in_nav == 'home') ?>>Home</a>
+                        <a href="/contests" <?= menu_attrs($current_in_nav == 'contests') ?>>Contests</a>
+                        <a href="/about" <?= menu_attrs($current_in_nav == 'about') ?>>About</a>
+                        <a href="/help" <?= menu_attrs($current_in_nav == 'help') ?>>Help</a>
                     </div>
                 </div>
             </div>
@@ -105,8 +92,9 @@ function if_signed_in_else(string $then_html, string $else_html)
                                     <button type="button"
                                             class="
                                                 hover:bg-gray-900 hover:text-white hover:rounded-md hover:px-3 hover:py-2 hover:text-sm hover:font-medium
-                                                text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                                            " id="sign-in-button"
+                                                text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium
+                                            "
+                                            id="sign-in-button"
                                         >Sign in</button
                                     >
                                 </a>
@@ -142,11 +130,10 @@ function if_signed_in_else(string $then_html, string $else_html)
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="md:hidden" id="mobile-menu">
         <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <a href="/" <?= mobile_menu_attrs('/') ?>>Home</a>
-            <a href="/contests" <?= mobile_menu_attrs('/contests') ?>>Contests</a>
-            <a href="/about" <?= mobile_menu_attrs('/about') ?>>About</a>
-            <a href="/help" <?= mobile_menu_attrs('/help') ?>>Help</a>
+            <a href="/" <?= mobile_menu_attrs($current_in_nav == 'home') ?>>Home</a>
+            <a href="/contests" <?= mobile_menu_attrs($current_in_nav == 'contests') ?>>Contests</a>
+            <a href="/about" <?= mobile_menu_attrs($current_in_nav == 'about') ?>>About</a>
+            <a href="/help" <?= mobile_menu_attrs($current_in_nav == 'help') ?>>Help</a>
         </div>
         <div class="border-t border-gray-700 pb-3 pt-4">
             <?= if_signed_in_else('

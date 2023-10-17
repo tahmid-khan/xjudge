@@ -1,8 +1,8 @@
 <?php if (!$headless) : ?>
 
-<?php view('partials/head.php', ['page_title' => 'Contests — Xjudge']) ?>
-<?php view('partials/nav.php') ?>
-<?php view('partials/banner.php', ['banner_header' => 'Contests']) ?>
+<?php view('partials/head.php', $view_data) ?>
+<?php view('partials/nav.php', $view_data) ?>
+<?php view('partials/banner.php', $view_data) ?>
 
 <main>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
@@ -38,10 +38,10 @@
                                 <div class="sm:flex">
                                     <p class="flex items-center text-sm text-gray-500">
                                         <!-- Heroicon name: mini/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
-                                        </svg>
-                                        <?= $contest['setter'] ?>
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor">-->
+<!--                                            <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />-->
+<!--                                        </svg>-->
+                                        Author: <?= $contest['setter'] ?>
                                     </p>
                                 </div>
                                 <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">

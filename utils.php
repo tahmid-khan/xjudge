@@ -18,9 +18,9 @@ function base_path(string $base_relative_path): string
     return BASE_PATH . $base_relative_path;
 }
 
-function view(string $path, array $data = []): void
+function view(string $path, array $view_data = []): void
 {
-    extract($data);
+    extract($view_data);
     require 'views/' . $path;
 }
 

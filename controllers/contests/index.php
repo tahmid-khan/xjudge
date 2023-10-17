@@ -21,6 +21,9 @@ foreach ($contests as $index => $contest) {
 }
 
 view('contests/index.view.php', [
+    'page_title' => 'Contests — Xjudge',
+    'current_in_nav' => 'contests',
+    'banner_header' => 'Contests',
     'contests' => $contests,
     'headless' => $headless,
 ]);
