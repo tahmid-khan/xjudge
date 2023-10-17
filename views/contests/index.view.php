@@ -20,8 +20,18 @@
                         <div class="px-4 py-4 sm:px-6">
                             <div class="flex items-center justify-between">
                                 <p class="truncate text-sm font-medium text-indigo-600"><?= $contest['name'] ?></p>
-                                <div class="ml-2 flex flex-shrink-0">
-                                    <span class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 mr-3">Full-time</span>
+                                <?php
+                                    if ($contest['status'] === 'Running') {
+                                        $status_color = 'bg-green-100 text-green-800';
+                                    } else if ($contest['status'] === 'Upcoming') {
+                                        $status_color = 'bg-red-100 text-red-800';
+                                    } else {
+                                        $status_color = 'border-gray-300 text-gray-600 border';
+                                    }
+                                ?><div class="ml-2 flex flex-shrink-0">
+                                    <span
+                                        class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 mr-3 <?= $status_color ?>"
+                                    ><?= $contest['status'] ?></span>
 
                                     <div class="mt-2 flex items-center text-sm sm:mt-0">
                                         <!-- Heroicon name: mini/calendar -->
@@ -63,7 +73,7 @@
                 const filter = document.getElementById('filter');
                 const list = document.querySelector('#contest-list');
                 filter.oninput = () => {
-                    list.innerHTML = '<li class="block"><div class="px-4 py-4 sm:px-6"><p class="text-sm text-gray-500" role="status">Loading ...</p></div></li>';
+                    // list.innerHTML = '<li class="block"><div class="px-4 py-4 sm:px-6"><p class="text-sm text-gray-500" role="status">Loading ...</p></div></li>';
                     const nameQuery = encodeURIComponent(filter.value);
                     fetch(`/contests?name=${nameQuery}&headless`)
                         .then(response => response.text())
@@ -73,6 +83,15 @@
                 }
             </script>
         </div>
+
+        <a href="/contests/new">
+            <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mt-4">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                </svg>
+                <span class="mx-2">Create</span>
+            </button>
+        </a>
     </div>
 </main>
 

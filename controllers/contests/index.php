@@ -13,11 +13,20 @@ foreach ($contests as $index => $contest) {
 
     $start_time = strtotime($contest['start_time']);
     $end_time = strtotime($contest['end_time']);
-    $contests[$index]['start_time'] = date('Y-m-d\TH:i', $start_time);
-    $contests[$index]['end_time'] = date('Y-m-d\TH:i', $end_time);
+    $contests[$index]['start_time'] = date('D, d M y H:i:s', $start_time);
+    $contests[$index]['end_time'] = date('D, d M y H:i:s', $end_time);
+
+    $now = time();
+    if ($now < $start_time) {
+        $contests[$index]['status'] = 'Upcoming';
+    } elseif ($now > $end_time) {
+        $contests[$index]['status'] = 'Ended';
+    } else {
+        $contests[$index]['status'] = 'Running';
+    }
 
     $duration = $end_time - $start_time;
-    $contests[$index]['duration'] = date('H:i', $duration);
+    $contests[$index]['duration'] = date('H\h i\m', $duration);
 }
 
 view('contests/index.view.php', [
