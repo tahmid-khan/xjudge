@@ -1,7 +1,3 @@
-<?php if ($auth_error) : ?>
-    <!-- <p><?= $auth_error ?></p> -->
-<?php endif; ?>
-
 <!doctype html>
 <html lang="en">
   <head>
