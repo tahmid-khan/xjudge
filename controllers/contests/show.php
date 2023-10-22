@@ -1,63 +1,124 @@
 <?php
 
-//dump($route_params);
-
 $contest_id = $route_params['contest_id'];
-
 $db = connect_db();
-$contest = $db->query('SELECT * FROM contest WHERE id = ?', [$contest_id])->result();
+
+$contest = $db
+    ->query('SELECT * FROM contest WHERE id = ?', [$contest_id])
+    ->result();
 if (!$contest) {
     abort(StatusCode::NOT_FOUND_404);
 }
-//dump($contest);
 
-$submissions = $db->query('SELECT * FROM submission WHERE contest_id = ?', [$contest_id])->all_results();
-//dump($submissions);
-
-$users_submissions = [];
-foreach ($submissions as $submission) {
-    $user_id = $submission['submitter_id'];
-    if (!isset($users_submissions[$user_id])) {
-        $users_submissions[$user_id] = [];
-    }
-    $users_submissions[$user_id][] = $submission;
-}
-//dump($users_submissions);
-
-$users_solves = [];
-foreach ($users_submissions as $user_id => $submissions) {
-    $users_solves[$user_id] = [];
-    foreach ($submissions as $submission) {
-        $verdict = $submission['verdict'];
-        if (str_contains(strtolower($verdict), 'accepted')) {
-            $letter = $submission['problem_index'];
-            if (!in_array($letter, $users_solves[$user_id])) {
-                $users_solves[$user_id][] = $letter;
-            }
-        }
-    }
-}
-
-//usort($users_solves, function ($user1, $user2) {
-//    return count($user2) - count($user1);
-//});
-//dump($users_solves);
-
-$db_users = $db->query('SELECT * FROM user')->all_results();
-$users_names = [];
-foreach ($db_users as $db_user) {
-    $users_names[$db_user['id']] = $db_user['username'];
-}
-
-$problems = $db->query(
-    'SELECT * FROM problem LEFT JOIN contest_problem cp on problem.id = cp.problem_id WHERE contest_id = ?',
+// for each user and problem index, select the time of the latest submission up to the first AC
+$statuses = [];
+$db->query(
+    /** @lang MySQL */ "
+    SELECT
+      user_id,
+      username,
+      problem_index,
+      max(CASE WHEN verdict = 'AC' THEN time END) AS first_ac_time,
+      max(time) AS last_attempt_time
+    FROM user JOIN submission ON user_id = user.id
+    WHERE contest_id = ? AND verdict <> 'CE'
+    GROUP BY user_id, problem_index;",
     [$contest_id]
-)->all_results();
+)->all_results(function ($user_id, $username, $problem_index, $first_ac_time, $last_attempt_time) use (&$statuses) {
+    $statuses[$user_id][$problem_index] = [
+        'username' => $username,
+        'last_attempt_time' => $first_ac_time ?? $last_attempt_time,
+        'is_accepted' => $first_ac_time !== null,
+    ];
+});
+
+dump($statuses);
+
+// standings according to ICPC scoring rules
+$standings = [
+    [
+        'rank' => 0,
+        'user_id' => -1,
+        'solve_count' => -1,
+        'total_time' => -1,
+    ],
+];
+$running_rank = 0;
+$db->query(
+    /** @lang MySQL */ "
+    WITH
+      filtered_submission AS (
+        SELECT
+          user_id,
+          problem_index,
+          time,
+          verdict
+        FROM submission
+        WHERE
+          contest_id = :contest_id
+          AND verdict <> 'CE'
+          AND time <= (
+            SELECT min(time)
+            FROM submission AS _
+            WHERE
+              contest_id = submission.contest_id
+              AND user_id = submission.user_id
+              AND problem_index = submission.problem_index
+              AND verdict = 'AC'
+          )
+      )
+    SELECT
+      user_id,
+      sum(CASE WHEN verdict = 'AC' THEN 1 ELSE 0 END) AS solve_count,
+      sum(
+        CASE
+          WHEN verdict = 'AC' THEN timestampdiff(SECOND, :start_time, time)
+          ELSE 20 * 60
+        END
+      ) AS total_time # time for first AC, plus 20 penalty minutes for every previously rejected run
+    FROM filtered_submission
+    GROUP BY user_id
+    ORDER BY # ranking
+      solve_count DESC, # first according to the most problems solved
+      total_time ASC, # then by the least total time
+      max(time) ASC; # then by the earliest time of the last accepted run",
+    [
+        'contest_id' => $contest_id,
+        'start_time' => $contest['start_time'],
+    ]
+)->all_results(function($user_id, $solve_count, $total_time) use (&$standings, &$running_rank) {
+    $prev = end($standings);
+    if ($prev['solve_count'] != $solve_count ||
+        $prev['total_time'] != $total_time
+    ) {
+        $running_rank++;
+    }
+
+    $standings[] = [
+        'rank' => $running_rank,
+        'user_id' => $user_id,
+        'solve_count' => $solve_count,
+        'total_time' => $total_time,
+    ];
+});
+unset($standings[0]);
+
+$running_rank++;
+foreach ($statuses as $user_id => $status) {
+    if (!array_key_exists($user_id, $standings)) {
+        $standings[] = [
+            'rank' => $running_rank,
+            'user_id' => $user_id,
+            'solve_count' => 0,
+            'total_time' => 0,
+        ];
+    }
+}
+
+dd($standings);
 
 view('contests/show.view.php', [
     'contest' => $contest,
-    'submissions' => $submissions,
-    'users_names' => $users_names,
-    'users_solves' => $users_solves,
-    'problems' => $problems,
+    'standings' => $standings,
+    'statuses' => $statuses,
 ]);

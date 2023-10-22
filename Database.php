@@ -50,8 +50,11 @@ class Database
         return $res;
     }
 
-    public function all_results(): false|array
+    public function all_results(callable $callback = null): false|array
     {
+        if ($callback) {
+            return $this->statement->fetchAll(PDO::FETCH_FUNC, $callback);
+        }
         return $this->statement->fetchAll();
     }
 
