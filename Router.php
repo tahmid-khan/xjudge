@@ -19,7 +19,7 @@ class Router
         $this->routes_controllers['POST'][$url_path] = $controller;
     }
 
-    public function route(string $uri, string $method = 'GET'): void
+    public function route(string $uri, string $method): void
     {
         $url_path = parse_url($uri, component: PHP_URL_PATH);
         $controllers = $this->routes_controllers[$method];
