@@ -14,23 +14,64 @@ if (!$contest) {
 $statuses = [];
 $db->query(
     /** @lang MySQL */ "
+    WITH
+      filtered_submission AS (
+        SELECT
+          user_id,
+          problem_index,
+          time,
+          verdict
+        FROM submission
+        WHERE
+          contest_id = ?
+          AND verdict <> 'CE'
+          AND time <= coalesce(
+            (
+              SELECT min(time)
+              FROM submission AS _
+              WHERE
+                contest_id = submission.contest_id
+                AND user_id = submission.user_id
+                AND problem_index = submission.problem_index
+                AND verdict = 'AC'
+            ),
+            (
+              SELECT max(time)
+              FROM submission AS _
+              WHERE
+                contest_id = submission.contest_id
+                AND user_id = submission.user_id
+                AND problem_index = submission.problem_index
+            )
+          )
+      )
     SELECT
       user_id,
       username,
       problem_index,
-      max(CASE WHEN verdict = 'AC' THEN time END) AS first_ac_time,
-      max(time) AS last_attempt_time
-    FROM user JOIN submission ON user_id = user.id
-    WHERE contest_id = ? AND verdict <> 'CE'
+      count(*) AS attempt_count,
+      max(time) AS last_attempt_time,
+      sum(CASE WHEN verdict = 'AC' THEN 1 ELSE 0 END) AS ac_count
+    FROM user JOIN filtered_submission ON user_id = user.id
     GROUP BY user_id, problem_index;",
     [$contest_id]
-)->all_results(function ($user_id, $username, $problem_index, $first_ac_time, $last_attempt_time) use (&$statuses) {
-    $statuses[$user_id][$problem_index] = [
-        'username' => $username,
-        'last_attempt_time' => $first_ac_time ?? $last_attempt_time,
-        'is_accepted' => $first_ac_time !== null,
-    ];
-});
+)->all_results(
+    function (
+        $user_id,
+        $username,
+        $problem_index,
+        $attempt_count,
+        $last_attempt_time,
+        $ac_count
+    ) use (&$statuses) {
+        $statuses[$user_id][$problem_index] = [
+            'username' => $username,
+            'attempt_count' => $attempt_count,
+            'last_attempt_time' => $last_attempt_time,
+            'is_accepted' => $ac_count != 0,
+        ];
+    }
+);
 
 dump($statuses);
 
