@@ -1,8 +1,10 @@
 <?php if (!$headless) : ?>
 
-<?php view('partials/head.php', $view_data) ?>
-<?php view('partials/nav.php', $view_data) ?>
-<?php view('partials/banner.php', $view_data) ?>
+<?php
+require BASE_PATH . 'views/partials/head.php';
+require BASE_PATH . 'views/partials/nav.php';
+require BASE_PATH . 'views/partials/banner.php';
+?>
 
 <main>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
@@ -95,6 +97,11 @@
     </div>
 </main>
 
-<?php view('partials/foot.php') ?>
+</div>
+</body>
+</html>
 
 <?php endif; ?>
+</div>
+</body>
+</html>

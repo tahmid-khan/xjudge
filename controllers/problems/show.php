@@ -2,6 +2,7 @@
 
 extract($route_params);
 
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 
 $contest = $db->query('SELECT * FROM contest WHERE id = ?', [$contest_id])->result();
@@ -22,8 +23,4 @@ if (!$problem) {
     abort(StatusCode::NOT_FOUND_404);
 }
 
-view('problems/show.view.php', [
-    'contest' => $contest,
-    'problem_index' => $problem_index,
-    'problem' => $problem,
-]);
+require BASE_PATH . 'views/problems/show.view.php';

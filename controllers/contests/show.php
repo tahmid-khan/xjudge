@@ -1,6 +1,7 @@
 <?php
 
 $contest_id = $route_params['contest_id'];
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 
 $contest = $db
@@ -158,8 +159,6 @@ foreach ($statuses as $user_id => $status) {
 
 dd($standings);
 
-view('contests/show.view.php', [
-    'contest' => $contest,
-    'standings' => $standings,
-    'statuses' => $statuses,
-]);
+$page_title = "Contest: {$contest['name']} — Xjudge";
+$banner_header = "{$contest['name']}";
+require BASE_PATH . 'views/contests/show.view.php';

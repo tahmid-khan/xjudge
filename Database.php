@@ -68,3 +68,9 @@ class Database
         return $this->statement->errorInfo();
     }
 }
+
+function connect_db(): Database
+{
+    $config = require 'config.php';
+    return new Database($config['database']);
+}

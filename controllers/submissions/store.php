@@ -96,6 +96,7 @@ extract($route_params);
 $language_id = $_POST['language-id'];
 $source_code = $_POST['source-code'];
 
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 $problem_id = $db->query(
     'SELECT problem_id FROM contest_problem WHERE contest_id = ? AND problem_index = ?',
@@ -128,4 +129,4 @@ if (!$db->is_success()) {
     dd($db->error());
 }
 
-header("Location: /contests/$contest_id/submissions");
+redirect("/contests/$contest_id/submissions/$submission_id");

@@ -1,6 +1,7 @@
 <?php
 
 $contest_id = $route_params['contest_id'];
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 
 $contest = $db->query('SELECT * FROM contest WHERE id = ?', [$contest_id])->result();
@@ -13,4 +14,6 @@ $problems = $db->query(
     [$contest_id]
 )->all_results();
 
-view('problems/index.view.php', ['contest' => $contest, 'problems' => $problems]);
+$page_title = "Contest: {$contest['name']} — Xjudge";
+$banner_header = "{$contest['name']}";
+require BASE_PATH . 'views/problems/index.view.php';

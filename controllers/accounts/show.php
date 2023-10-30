@@ -2,4 +2,4 @@
 
 require_auth('You must be logged in to view that page.');
 
-view('accounts/show.view.php');
+require BASE_PATH . 'views/accounts/show.view.php';

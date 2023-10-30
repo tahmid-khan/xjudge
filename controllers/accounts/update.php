@@ -27,11 +27,12 @@ if (!$password) {
     $errors['password'] = 'Password must be at least 8 characters long';
 }
 if (!empty($errors)) {
-    view('accounts/show.view.php', ['errors' => $errors]);
+    require BASE_PATH . 'views/accounts/show.view.php';
     die();
 }
 
 global $db;
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 
 // check if the user exists
@@ -44,7 +45,7 @@ if ($user) {
     $errors['email'] = 'Email already exists';
 }
 if (!empty($errors)) {
-    view('accounts/show.view.php', ['errors' => $errors]);
+    require BASE_PATH . 'views/accounts/show.view.php';
     die();
 }
 
@@ -65,5 +66,6 @@ if ($db->is_success()) {
 } else {
     require 'StatusCode.php';
     http_response_code(StatusCode::INTERNAL_SERVER_ERROR_500);
-    view('accounts/show.view.php', ['server_error' => 'Something went wrong, please try again']);
+    $server_error = 'Something went wrong, please try again';
+    require BASE_PATH . 'views/accounts/show.view.php';
 }

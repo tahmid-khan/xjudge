@@ -2,8 +2,8 @@
 
 const BASE_PATH = __DIR__ . '/../';
 require BASE_PATH . 'utils.php';
-require base_path('vendor/autoload.php');
-require base_path('Router.php');
+require BASE_PATH . 'vendor/autoload.php';
+require BASE_PATH . 'Router.php';
 
 session_start();
 

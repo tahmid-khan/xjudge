@@ -2,11 +2,11 @@
 
 $contest_id = $route_params['contest_id'];
 
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 $submissions = $db->query(
     /** @lang MySQL */ "SELECT * FROM submission WHERE contest_id = ?",
     [$contest_id]
 )->all_results();
 
-dump($submissions);
-view('submissions/index.view.php', ['submissions' => $submissions]);
+require BASE_PATH . 'views/submissions/index.view.php';

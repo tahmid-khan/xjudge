@@ -1,5 +1,6 @@
 <?php
 
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 
 $name_contains = $_GET['name'] ?? '';
@@ -29,10 +30,7 @@ foreach ($contests as $index => $contest) {
     $contests[$index]['duration'] = date('H\h i\m', $duration);
 }
 
-view('contests/index.view.php', [
-    'page_title' => 'Contests — Xjudge',
-    'current_in_nav' => 'contests',
-    'banner_header' => 'Contests',
-    'contests' => $contests,
-    'headless' => $headless,
-]);
+$page_title = 'Contests — Xjudge';
+$current_in_nav = 'contests';
+$banner_header = 'Contests';
+require BASE_PATH . 'views/contests/index.view.php';

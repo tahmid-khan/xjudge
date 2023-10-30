@@ -13,34 +13,31 @@ if (!$username || !$password) {
     if (!$password) {
         $errors['password'] = 'Password is required';
     }
-    view('sessions/create.view.php', ['errors' => $errors]);
+    require BASE_PATH . 'views/sessions/create.view.php';
     die();
 }
 
 // connect to the database
 global $db;
+require BASE_PATH . 'Database.php';
 $db = connect_db();
 
 // check if the user exists
-$user = $db->query('SELECT * FROM user WHERE username = ?', [$username])->result();
+$user = $db
+    ->query('SELECT * FROM user WHERE username = ?', [$username])
+    ->result();
 if (!$user) {
     http_response_code(StatusCode::UNAUTHORIZED_401);
-    view('sessions/create.view.php', [
-        'errors' => [
-            'username' => 'Username does not exist',
-        ],
-    ]);
+    $errors = ['username' => 'Username does not exist'];
+    require BASE_PATH . 'views/sessions/create.view.php';
     die();
 }
 
 // check if the password is correct
 if (!password_verify($password, $user['password'])) {
     http_response_code(StatusCode::UNAUTHORIZED_401);
-    view('sessions/create.view.php', [
-        'errors' => [
-            'password' => 'Incorrect password',
-        ],
-    ]);
+    $errors = ['password' => 'Incorrect password'];
+    require BASE_PATH . 'views/sessions/create.view.php';
     die();
 }
 

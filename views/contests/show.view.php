@@ -1,6 +1,8 @@
-<?php view('partials/head.php', ['page_title' => "Contest: {$contest['name']} — Xjudge"]) ?>
-<?php view('partials/nav.php') ?>
-<?php view('partials/banner.php', ['banner_header' => "{$contest['name']}"]) ?>
+<?php
+require BASE_PATH . 'views/partials/head.php';
+require BASE_PATH . 'views/partials/nav.php';
+require BASE_PATH . 'views/partials/banner.php';
+?>
 
 <main>
     <div class="px-4 sm:px-6 lg:px-8">
@@ -51,4 +53,6 @@
     </div>
 </main>
 
-<?php view('partials/foot.php') ?>
+</div>
+</body>
+</html>
