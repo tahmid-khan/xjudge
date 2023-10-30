@@ -23,7 +23,10 @@ if (!$password) {
     $errors['password'] = 'A password must be provided';
 } elseif (strlen($password) < 8) {
     $errors['password'] = 'Password must be at least 8 characters long';
+} elseif ($password !== $_POST['password_confirmation']) {
+    $errors['password_confirmation'] = 'Passwords do not match';
 }
+
 if (!empty($errors)) {
     view('accounts/create.view.php', ['errors' => $errors]);
     die();
