@@ -90,7 +90,17 @@ function mobile_menu_attrs(bool $is_selected): string
                                                 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium
                                             "
                                             id="sign-in-button"
-                                        >Sign in</button
+                                        >Log in</button
+                                    >
+                                </a>
+                                <a href="/signup">
+                                    <button type="button"
+                                            class="
+                                                hover:bg-gray-900 hover:text-white hover:rounded-md hover:px-3 hover:py-2 hover:text-sm hover:font-medium
+                                                text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium
+                                            "
+                                            id="sign-in-button"
+                                        >Sign up</button
                                     >
                                 </a>
                             </div>
