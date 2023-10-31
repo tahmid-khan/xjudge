@@ -35,5 +35,6 @@ $router->map_get('/contests/:contest_id/problems/:problem_index', controller: 'p
 
 $router->map_post('/contests/:contest_id/problems/:problem_index', controller: 'submissions/store.php');
 $router->map_get('/contests/:contest_id/submissions', controller: 'submissions/index.php');
+$router->map_get('/contests/:contest_id/submissions/:submission_id', controller: 'submissions/show.php');
 
 $router->route(uri: $_SERVER['REQUEST_URI'], method: $_SERVER['REQUEST_METHOD']);

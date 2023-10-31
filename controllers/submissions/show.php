@@ -1,51 +1,14 @@
 <?php
 
-extract($route_params);
+$contest_id = $route_params['contest_id'];
+$submission_id = $route_params['submission_id'];
 
 require BASE_PATH . 'Database.php';
 $db = connect_db();
-
-$contest = $db->query(
-/** @lang MySQL */ '
-      SELECT
-        id,
-        name,
-        start_time,
-        end_time,
-        count(cp.problem_index) AS problem_count
-      FROM contest JOIN contest_problem AS cp ON id = cp.contest_id
-      WHERE id = ?
-      GROUP BY id
-', [$contest_id])->result();
-if (!$contest) {
-    abort(StatusCode::NOT_FOUND_404);
-}
-if (!$contest) {
-    abort(StatusCode::NOT_FOUND_404);
-}
-$contest_id = $contest['id'];
-$contest_name = $contest['name'];
-$start_time = $contest['start_time'];
-$end_time = $contest['end_time'];
-$problem_count = $contest['problem_count'];
-
-$problem_id = $db->query(
-    'SELECT problem_id FROM contest_problem WHERE contest_id = ? AND problem_index = ?',
-    [$contest_id, $problem_index]
-)->result()['problem_id'];
-if (!$problem_id) {
-    abort(StatusCode::NOT_FOUND_404);
-}
-
-$problem = $db->query('SELECT * FROM problem WHERE id = ?', [$problem_id])->result();
-if (!$problem) {
-    abort(StatusCode::NOT_FOUND_404);
-}
-$problem_name = $problem['title'];
-$statement = $problem['statement'];
-$time_limit = $problem['time_limit'];
-$memory_limit = $problem['memory_limit'];
-
+$submission = $db->query(
+    /** @lang MySQL */ "SELECT * FROM submission WHERE id = ?",
+    [$submission_id]
+)->all_results();
 
 // for each user and problem index, select the time of the latest submission up to the first AC
 $statuses = [];
@@ -116,4 +79,4 @@ foreach ($statuses as $user_id => $status) {
     );
 }
 
-require BASE_PATH . 'views/problems/show.view.php';
+require BASE_PATH . 'views/submissions/show.view.php';

@@ -39,7 +39,6 @@ $db->query(
         FROM submission
         WHERE
           contest_id = ?
-          AND verdict <> 'CE'
           AND time <= coalesce(
             (
               SELECT min(time)
@@ -85,17 +84,18 @@ $db->query(
             'last_attempt_time' => $last_attempt_time,
             'is_accepted' => $ac_count != 0,
         ];
+        $statuses[$user_id]['username'] = $username;
     }
 );
-foreach ($statuses as $user_id => $status) {
-    $statuses[$user_id]['ac_count'] = array_reduce(
-        $status,
-        function ($carry, $problem_status) {
-            return $carry + $problem_status['is_accepted'];
-        },
-        0
-    );
-}
+//foreach ($statuses as $user_id => $status) {
+//    $statuses[$user_id]['ac_count'] = array_reduce(
+//        $status,
+//        function ($carry, $problem_status) {
+//            return $carry + $problem_status['is_accepted'];
+//        },
+//        0
+//    );
+//}
 
 //dump($statuses);
 

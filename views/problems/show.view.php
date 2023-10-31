@@ -197,7 +197,7 @@
           </ol>
         </nav>
         <article class="bg-white rounded-lg shadow-md mt-3 p-8 w-full">
-          <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">A. Name of the Problem Problem Problem Problem</h2>
+          <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"><?= $problem_index ?>. <?= $problem_name ?></h2>
           <div class="mt-2 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6">
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <!-- Heroicon name: mini/clock -->

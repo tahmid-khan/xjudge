@@ -22,7 +22,7 @@
     </div>
 
     <!-- Clock area -->
-    <div id="small_clock" class="sm:hidden mx-auto text-lg">
+    <div class="sm:hidden mx-auto text-lg clock">
       01:33:21
     </div>
 
@@ -94,6 +94,7 @@
               class="
                 block py-2 px-3 font-medium text-gray-800
                 text-4xl
+                clock
               "
             >01:33:21</span>
           </div>
@@ -203,8 +204,9 @@
                   <table class="min-w-full divide-y divide-gray-300">
                     <thead class="bg-gray-50">
                       <tr>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Rank</th>
                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Username</th>
-                        <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Solved</th>
+                        <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Solves/Time</th>
                           <?php for ($i = 0; $i < $problem_count; $i++): ?><?php $letter = chr(ord('A') + $i); ?>
                             <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">
                               <a href="/contests/<?= $contest_id ?>/problems/<?= $letter ?>"><?= $letter ?></a>
@@ -212,11 +214,15 @@
                           <?php endfor; ?>
                       </tr>
                     </thead>
-                    <tbody class="bg-white"><?php foreach ($statuses as $user_id => $status) : ?>
-
+                    <tbody class="bg-white"><?php foreach ($standings as $standing) : ?>
+                      <?php
+                            $user_id = $standing['user_id'];
+                            $status = $statuses[$user_id];
+                      ?>
                         <tr>
+                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><?= $standing['rank'] ?></td>
                           <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><?= $status[0]['username'] ?></td>
-                          <td class="whitespace-nowrap px-3 py-4 text-center text-sm font-medium text-gray-900"><?= $status['ac_count'] ?></td>
+                          <td class="whitespace-nowrap px-3 py-4 text-center text-sm font-medium text-gray-900"><?= $standing['solve_count'] . '/' . $standing['total_time'] ?></td>
                             <?php for ($i = 0; $i < $problem_count; $i++) : ?><?php $problem_status = $status[$i]; ?>
                                 <?php if (isset($problem_status['attempt_count'])) : ?>
                                 <td class="whitespace-nowrap px-3 py-4 text-center text-sm font-medium text-gray-900 <?= $problem_status['is_accepted'] ? 'bg-green-200' : 'bg-red-200' ?>"
@@ -310,17 +316,30 @@
   <!--  </nav>-->
 
   <script>
-    // const mobileProbMenu = document.getElementById("problems_menu_mobile");
-    // const mobileProbMenuToggle = document.getElementById("problems_menu_toggle");
-    // mobileProbMenuToggle.onclick = () => {
-    //   const expanded = mobileProbMenuToggle.getAttribute("aria-expanded") === true;
-    //   mobileProbMenuToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
-    //
-    //   mobileProbMenu.classList.toggle("max-h-0");
-    //   mobileProbMenu.classList.toggle("max-h-80");
-    //   mobileProbMenu.classList.toggle("pt-2");
-    //   mobileProbMenu.classList.toggle("pb-3");
-    // };
+    const pad = (t) => {
+      const s = String(t);
+      return s.length < 2 ? "0" + s : s;
+    };
+
+    const endTime = <?= $end_time ?>
+    let hours = 3;
+    let minutes = 0;
+    let seconds = 0;
+
+    setInterval(function () {
+      --seconds;
+      if (seconds < 0) {
+        seconds = 59;
+        --minutes;
+      }
+      if (minutes < 0) {
+        minutes = 59;
+        --hours;
+      }
+      document.querySelector(".clock").innerHTML = hours < 0
+        ? "Contest Finished"
+        : `<time datetime="PT${hours}H${minutes}M${seconds}S">${hours}:${pad(minutes)}:${pad(seconds)}</time>`;
+    }, 1000)
 
     const menu_container = document.getElementById("menu_container");
     const menu = document.getElementById("menu");

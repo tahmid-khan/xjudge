@@ -55,7 +55,7 @@ function mobile_menu_attrs(bool $is_selected): string
                                         id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                     <span class="absolute -inset-1.5"></span>
                                     <span class="sr-only">Open user menu</span>
-                                    <span class="text-white"><?= strtoupper($_SESSION['username'][0]) ?></span>
+                                    <span class="text-white"><?= $_SESSION['username'] ?></span>
 <!--                                    <img class="h-8 w-8 rounded-full"-->
 <!--                                         src="/images/photo.avif"-->
 <!--                                         alt="Portrait">-->
