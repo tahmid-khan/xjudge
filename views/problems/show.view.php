@@ -30,8 +30,8 @@
     </div>
 
     <!-- Clock area -->
-    <div id="small_clock" class="sm:hidden mx-auto text-lg">
-      01:33:21
+    <div class="sm:hidden mx-auto text-lg clock">
+      --:--:--
     </div>
 
     <!-- Menu button area -->
@@ -96,14 +96,16 @@
               class="
               block rounded-md px-3
               text-xs font-medium text-gray-700 uppercase
+              clock-label
             "
-            >Ends in</span>
+            >Time</span>
             <span
               class="
                 block py-2 px-3 font-medium text-gray-800
                 text-4xl
+                clock
               "
-            >01:33:21</span>
+            >--:--:--</span>
           </div>
           <div class="border-t border-gray-200 pt-4 pb-3">
             <div class="max-w-8xl mx-auto space-y-1 px-2 sm:px-4">
@@ -322,17 +324,55 @@
   <!--  </nav>-->
 
   <script>
-    // const mobileProbMenu = document.getElementById("problems_menu_mobile");
-    // const mobileProbMenuToggle = document.getElementById("problems_menu_toggle");
-    // mobileProbMenuToggle.onclick = () => {
-    //   const expanded = mobileProbMenuToggle.getAttribute("aria-expanded") === true;
-    //   mobileProbMenuToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
-    //
-    //   mobileProbMenu.classList.toggle("max-h-0");
-    //   mobileProbMenu.classList.toggle("max-h-80");
-    //   mobileProbMenu.classList.toggle("pt-2");
-    //   mobileProbMenu.classList.toggle("pb-3");
-    // };
+    const pad = (t) => {
+      const s = String(t);
+      return s.length < 2 ? "0" + s : s;
+    };
+
+    const endTime = new Date("<?= $end_time ?>").getTime();
+    const startTime = new Date("<?= $start_time ?>").getTime();
+    const clockLabels = document.querySelectorAll(".clock-label");
+    const clocks = document.querySelectorAll(".clock");
+
+    setInterval(function () {
+      const now = new Date().getTime();
+
+      if (now < startTime) {
+        clockLabels.forEach((el) => {
+          el.innerHTML = "Starts in";
+        });
+        clocks.forEach((el) => {
+          // Find the distance between now and the count down date
+          let distance = startTime - now;
+
+          // Time calculations for days, hours, minutes and seconds
+          let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          el.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s `;
+        });
+      } else {
+        // Find the distance between now and the count down date
+        let distance = endTime - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        clockLabels.forEach((el) => {
+          el.innerHTML = distance < 0 ? "The contest has ended" : "Ends in";
+        });
+        clocks.forEach((el) => {
+          el.innerHTML = distance < 0
+            ? "Final results"
+            : `<time datetime="PT${hours}H${minutes}M${seconds}S">${hours}:${pad(minutes)}:${pad(seconds)}</time>`;
+        });
+      }
+    }, 1000);
 
     const menu_container = document.getElementById("menu_container");
     const menu = document.getElementById("menu");
@@ -352,22 +392,6 @@
       menu_container.classList.add("-z-10");
       menu_container.classList.remove("z-30");
     };
-
-    // const editorArea = document.getElementById("editor_area");
-    // const editorToggleContainer = document.getElementById("editor_toggle");
-    // const editorToggle = editorToggleContainer.children[0];
-    // editorToggle.onclick = () => {
-    //   if (editorToggleContainer.getAttribute("aria-expanded") === "true") {
-    //     editorToggleContainer.setAttribute("aria-expanded", "false");
-    //     editorToggle.innerHTML = "Open editor";
-    //   } else {
-    //     editorToggleContainer.setAttribute("aria-expanded", "true");
-    //     editorToggle.innerHTML = "Close editor";
-    //   }
-    //
-    //   editorArea.classList.toggle("w-0");
-    //   editorArea.classList.toggle("w-32");
-    // };
   </script>
 </body>
 </html>

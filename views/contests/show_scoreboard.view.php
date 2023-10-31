@@ -23,7 +23,7 @@
 
     <!-- Clock area -->
     <div class="sm:hidden mx-auto text-lg clock">
-      01:33:21
+      --:--:--
     </div>
 
     <!-- Menu button area -->
@@ -88,15 +88,16 @@
               class="
               block rounded-md px-3
               text-xs font-medium text-gray-700 uppercase
+              clock-label
             "
-            >Ends in</span>
+            >Time</span>
             <span
               class="
                 block py-2 px-3 font-medium text-gray-800
                 text-4xl
                 clock
               "
-            >01:33:21</span>
+            >--:--:--</span>
           </div>
           <div class="border-t border-gray-200 pt-4 pb-3">
             <div class="max-w-8xl mx-auto space-y-1 px-2 sm:px-4">
@@ -321,25 +322,50 @@
       return s.length < 2 ? "0" + s : s;
     };
 
-    const endTime = <?= $end_time ?>
-    let hours = 3;
-    let minutes = 0;
-    let seconds = 0;
+    const endTime = new Date("<?= $end_time ?>").getTime();
+    const startTime = new Date("<?= $start_time ?>").getTime();
+    const clockLabels = document.querySelectorAll(".clock-label");
+    const clocks = document.querySelectorAll(".clock");
 
     setInterval(function () {
-      --seconds;
-      if (seconds < 0) {
-        seconds = 59;
-        --minutes;
+      const now = new Date().getTime();
+
+      if (now < startTime) {
+        clockLabels.forEach((el) => {
+          el.innerHTML = "Starts in";
+        });
+        clocks.forEach((el) => {
+          // Find the distance between now and the count down date
+          let distance = startTime - now;
+
+          // Time calculations for days, hours, minutes and seconds
+          let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          el.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s `;
+        });
+      } else {
+        // Find the distance between now and the count down date
+        let distance = endTime - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        clockLabels.forEach((el) => {
+          el.innerHTML = distance < 0 ? "The contest has ended" : "Ends in";
+        });
+        clocks.forEach((el) => {
+          el.innerHTML = distance < 0
+            ? "Final results"
+            : `<time datetime="PT${hours}H${minutes}M${seconds}S">${hours}:${pad(minutes)}:${pad(seconds)}</time>`;
+        });
       }
-      if (minutes < 0) {
-        minutes = 59;
-        --hours;
-      }
-      document.querySelector(".clock").innerHTML = hours < 0
-        ? "Contest Finished"
-        : `<time datetime="PT${hours}H${minutes}M${seconds}S">${hours}:${pad(minutes)}:${pad(seconds)}</time>`;
-    }, 1000)
+    }, 1000);
 
     const menu_container = document.getElementById("menu_container");
     const menu = document.getElementById("menu");
