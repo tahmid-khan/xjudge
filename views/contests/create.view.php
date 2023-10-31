@@ -44,17 +44,6 @@ require BASE_PATH . 'views/partials/banner.php';
                         <p class="mt-1 text-sm text-gray-500">Read the <a href="/help" class="underline hover:no-underline text-indigo-600">help page</a> to learn how to specify problem IDs.</p>
                     </div>
                     <div class="mt-6">
-                        <ol>
-                            <li class="flex items-center w-full">
-                                <div class="flex items-center rounded-md shadow-sm w-1/2">
-                                    <span class="w-1/6 inline-fle items-center justify-center border-y border-l rounded-l-md border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">abcxyz123</span>
-                                    <input type="text" class="border-y border-gray-300">
-                                    <input type="text" class="border-y border-r rounded-r-md border-gray-300">
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="mt-6">
                         <ol id="problem-code-inputs">
                             <li class="flex items-center mt-1">
                                 <div class="flex items-center sm:col-span-2">
