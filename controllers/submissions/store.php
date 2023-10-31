@@ -108,13 +108,14 @@ $browser = $puppeteer->launch(['headless' => false]);
 $page = $browser->newPage();
 goto_submit_page($page);
 $result = write_code_and_submit($page, $problem_id, $language_id, $source_code);
+$submission_id = $result['submission_id'];
 dump($result);
 
 $db->query(
     'INSERT INTO submission (id, submitter_id, contest_id, problem_index, language_id, source_code, verdict_type, verdict)
     VALUES (:id, :submitter_id, :contest_id, :problem_index, :language_id, :source_code, :verdict_type, :verdict)',
     [
-        'id' => $result['submission_id'],
+        'id' => $submission_id,
         'submitter_id' => $_SESSION['user_id'],
         'contest_id' => $contest_id,
         'problem_index' => $problem_index,

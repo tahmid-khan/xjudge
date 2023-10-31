@@ -1,316 +1,373 @@
 <!doctype html>
-<html lang="en">
-
-
+<html lang="en" class="h-full bg-gray-100">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Xjudge</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Problem A</title>
+  <meta name="description" content="<?= $page_descr
+      ?? 'Xjudge is a virtual judge system and contest hosting platform for algorithmic programming contests.' ?>">
 
-    <style>
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="/styles.css">
 
-        .problem {
-            font-family: "STIX Two Text", "XITS", "Noto Serif", Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-        }
-
-        .problem h1, .problem h3, .problem .resource-limits {
-            font-family: sans-serif;
-        }
-
-        math {
-            /* color: red; */
-            font-family: "STIX Two Math", "XITS Math", CMSY10, CMEX10, Symbol, Times, math;
-            font-style: normal;
-        }
-
-        #source-code {
-            font-family: "Courier New", Courier, monospace;
-            width: 100%;
-        }
-    </style>
+  <script>
+    MathJax = {
+      tex: {inlineMath: [['$$$','$$$']], displayMath: [['$$$$$$','$$$$$$']]}
+    };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
-<body>
-    <div class="container-fluid">
-        <header>
-            <div class="row mt-3">
-                <div class="col-5">
-                    <ul class="nav nav-underline nav-fill">
-                        <li class="nav-item"><a class="nav-link" href="index.php">Xjudge</a></li>
-                        <li class="nav-item"><a class="nav-link" aria-current="page" href="contests.php">Contests</a></li>
-                        <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
-                    </ul>
-                </div>
+<body class="h-full sm:grid sm:grid-cols-[20rem_auto]">
+  <header class="relative sm:col-span-1 h-16 bg-white sm:bg-inherit flex flex-shrink-0 items-center">
+    <!-- Logo area -->
+    <div class="sm:hidden absolute inset-y-0 left-0 md:static md:flex-shrink-0">
+      <a href="/"
+         class="flex h-16 w-16 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600 md:w-20">
+        <img class="h-8 w-auto" src="/images/logo.svg" alt="Xjudge logo">
+      </a>
+    </div>
 
-                <div class="col-4">
+    <!-- Clock area -->
+    <div id="small_clock" class="sm:hidden mx-auto text-lg">
+      01:33:21
+    </div>
 
-                </div>
-                <div class="col-2 d-flex flex-row-reverse">
-                    <a class="nav-link" aria-current="page" href="login.html">Logout</a>
-                </div>
+    <!-- Menu button area -->
+    <div class="sm:hidden absolute inset-y-0 right-0 flex items-center pr-4 sm:pr-6 md:hidden">
+      <!-- Mobile menu button -->
+      <button
+        id="menu_expander" type="button" aria-expanded="false" aria-controls="menu"
+        class="
+          -mr-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600
+        "
+      >
+        <span class="sr-only">Open main menu</span>
+        <!-- Heroicon name: outline/bars-3 -->
+        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu, show/hide this `div` based on menu open/closed state -->
+    <div id="menu_container" class="relative hidden sm:block -z-10 sm:z-10" role="dialog" aria-modal="true">
+      <div class="fixed inset-0">
+        <!--
+          Mobile menu, toggle classes based on menu state.
+
+          Entering: "transition ease-out duration-150 sm:ease-in-out sm:duration-300"
+            From: "transform opacity-0 scale-110 sm:translate-x-full sm:scale-100 sm:opacity-100"
+            To: "transform opacity-100 scale-100  sm:translate-x-0 sm:scale-100 sm:opacity-100"
+          Leaving: "transition ease-in duration-150 sm:ease-in-out sm:duration-300"
+            From: "transform opacity-100 scale-100 sm:translate-x-0 sm:scale-100 sm:opacity-100"
+            To: "transform opacity-0 scale-110  sm:translate-x-full sm:scale-100 sm:opacity-100"
+        -->
+        <div id="menu" class="h-full w-full top-0 sm:inset-y-0 sm:right-auto sm:left-0 sm:w-full sm:max-w-xs shadow-lg sm:shadow-none hidden sm:block bg-white sm:bg-gray-50" aria-label="Global">
+          <div class="flex h-16 items-center justify-between px-4 sm:px-6 sm:hidden">
+            <a href="#">
+              <img class="block h-8 w-auto" src="/images/logo.svg" alt="Xjudge logo">
+            </a>
+            <button id="menu_closer" type="button" class="-mr-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+              <span class="sr-only">Close main menu</span>
+              <!-- Heroicon name: outline/x-mark -->
+              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <!--      <div class="max-w-8xl mx-auto mt-2 px-4 sm:px-6">-->
+          <!--        <div class="relative text-gray-400 focus-within:text-gray-500">-->
+          <!--          <label for="mobile-search" class="sr-only">Search all inboxes</label>-->
+          <!--          <input id="mobile-search" type="search" placeholder="Search all inboxes" class="block w-full rounded-md border-gray-300 pl-10 placeholder-gray-500 focus:border-indigo-600 focus:ring-indigo-600">-->
+          <!--          <div class="absolute inset-y-0 left-0 flex items-center justify-center pl-3">-->
+          <!--            &lt;!&ndash; Heroicon name: mini/magnifying-glass &ndash;&gt;-->
+          <!--            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">-->
+          <!--              <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />-->
+          <!--            </svg>-->
+          <!--          </div>-->
+          <!--        </div>-->
+          <!--      </div>-->
+          <div class="max-w-8xl mx-auto py-3 px-2 sm:px-4 text-center sm:pt-8">
+            <h1 class="text-2xl mb-5"><?= $contest_name ?></h1>
+            <span
+              class="
+              block rounded-md px-3
+              text-xs font-medium text-gray-700 uppercase
+            "
+            >Ends in</span>
+            <span
+              class="
+                block py-2 px-3 font-medium text-gray-800
+                text-4xl
+              "
+            >01:33:21</span>
+          </div>
+          <div class="border-t border-gray-200 pt-4 pb-3">
+            <div class="max-w-8xl mx-auto space-y-1 px-2 sm:px-4">
+              <a href="/contests/<?= $contest_id ?>/scoreboard" class="rounded-md py-2 px-3 text-base font-medium text-gray-800 hover:bg-white flex items-center">
+                <!-- Heroicon name: outline/chart-bar -->
+                <svg class="text-gray-500 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                </svg>
+                Scoreboard
+              </a>
+              <a href="/contests/<?= $contest_id ?>/problems" class="rounded-md py-2 px-3 text-base font-medium text-gray-800 bg-gray-200 flex items-center">
+                <svg class="text-gray-500 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+                </svg>
+                Problems
+              </a>
+              <a href="/contests/<?= $contest_id ?>/submissions" class="rounded-md py-2 px-3 text-base font-medium text-gray-800 hover:bg-white flex items-center">
+                <svg class="text-gray-500 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+                </svg>
+                Results
+              </a>
             </div>
-            <div class="col-1"></div>
-            <div class="row">
-                <div class="col-lg-12 bg-dark border rounded d-flex flex-row-reverse m-1">
-
-                    <div class="collapse" id="navbarToggleExternalContent">
-                        <div class="bg-dark p-4">
-                            <h5 class="text-white h4">Collapsed content</h5>
-                            <span class="text-muted">Toggleable via the navbar brand.</span>
-                        </div>
-                    </div>
-                    <nav class="navbar navbar-dark bg-dark">
-                        <div class="container-fluid">
-                            <button type="button" class="btn btn-primary btn-lg navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                        </div>
-                    </nav>
-                </div>
+          </div>
+          <div class="block border-t border-gray-200 pt-4 pb-3">
+            <div class="max-w-8xl mx-auto space-y-1 px-2 sm:px-4">
+              <span
+                class="
+                  block rounded-md py-2 px-3
+                  text-xs font-medium text-gray-700 uppercase
+                "
+              >Problems</span>
+                <?php $user_status = $statuses[$_SESSION['user_id']]; ?>
+                <?php for ($i = 0; $i < $problem_count; $i++): ?>
+                <?php
+                $letter = chr(ord('A') + $i);
+                $is_attemted = isset($user_status[$i]);
+                $is_solved = $is_attemted && $user_status[$i]['is_accepted'];
+                ?>
+              <a href="/contests/<?= $contest_id ?>/problems/<?= $letter ?>" class="rounded-md py-2 pl-5 pr-3 text-base font-medium text-gray-800 hover:bg-gray-100 flex items-center">
+                  <?php if ($is_solved) : ?>
+                    <span class="text-green-500 mr-4">✓</span
+                    ><?php elseif ($is_attemted) : ?>
+                    <span class="text-red-500 mr-4">✘</span
+                    ><?php else : ?>
+                    <span class="mr-4">🞐</span
+                    ><?php endif ?><?= $letter ?>
+                  <?php endfor; ?>
+              </a>
             </div>
-
-        </header>
-        <div class="row container-fluid p-3 ">
-            <div class="col-3">
-                <div class="row">
-                    <div class="col-sm-6 col-md-6 col-lg-5">
-                        <div class="d-flex align-items-start">
-                            <div class="nav flex-column nav-tabs" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><a href="overview.html">Overview</a></button>
-                                <!-- <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><a href="status.html">Status</a></button> -->
-                                <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false"><a href="standings.html">Standings</a></button>
-                                <button class="nav-link active" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false"><a href="problems.html">Problems</a></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-1"></div>
-                    <div class="tab-content col-sm-5 col-md-5 col-lg-6" id="v-pills-tabContent">
-                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-
-                            <nav id="navbar-example2" class="navbar navbar-light bg-light" aria-orientation="vertical">
-
-                                <ul class="nav nav-pills nav-fill">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#scrollspyHeading1">First</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#scrollspyHeading2">Second</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#scrollspyHeading3">Third</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">Hey hold on</div>
-                        <div class="tab-pane fade" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">...</div>
-                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
-                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-
-
-        <div class="row">
-
-            <div class="col-3">
-                <div class="row m-1">
-                    <button type="button" class="btn btn-primary btn-lg btn-block mb-1">Submit</button></div>
-                <div class="border shadow p-1 mb-1 bg-white rounded">
-                   <pre>
-                    Time Limit               1000ms
-                    Mem Limit                263144kB
-                    OS                       Windows
-                    Source                   ICPC 2012
-                    Spoiler                  Hide
-                   </pre>
-                </div>
-                <div class="border shadow p-1 mb-1 bg-white rounded">
-                    <pre>
-                     User                     227/236
-                                              230/?
-                    </pre>
-                </div>
-            </div>
-
-
-            <div class="col-9 overflow-auto h-50  Statement">
-
-                <div class="container-fluid border shadow p-3 mb-5 bg-white rounded" id="scrollspyHeading1">	<div class="p-5 text-light problem bg-dark">
-                        <?php
-
-
-//                        // Parse the JSON data
-//                        $sampleTestsInput = json_decode($problem['sample_tests_input'], true);
-//                        $sampleTestsOutput = json_decode($problem['sample_tests_output'], true);
-
-                        // Generate HTML content based on the parsed data
-                        $html = '<div>';
-                        $html .= $problem['title'].'<br>';
-                        $html.= $problem['time_limit'].'<br>';
-//                        $html.= $problem['memory_limit'].'<br>';
-                        $html.= $problem['statement'].'<br>';
-                        $html.= $problem['input_spec'].'<br>';
-                        $html.= $problem['output_spec'].'<br>';
-                        $html.= $problem['samples'].'<br>';
-                        // Loop through the sample tests and create HTML for each
-//                        foreach ($sampleTestsInput as $index => $input) {
-//                            $html .= '<div class="sample-test">';
-//                            $html .= '<h3>Sample Test ' . ($index + 1) . '</h3>';
-//                            $html .= '<h4>Input:</h4>';
-//                            $html .=  htmlspecialchars($input) ;
-//                            $html .= '<h4>Output:</h4>';
-//                            $html .=  htmlspecialchars($sampleTestsOutput[$index]);
-//                            $html .= '</div>';
-//                        }
-                        $html.= $problem['note'].'<br>';
-                        $html .= '</div>';
-
-                        // Display the HTML content
-                        echo $html;
-
-                        ?>
-                        This code assumes that you have a problems table with columns sample_tests_input and sample_tests_output, where JSON data is stored. Make sure to replace 'your_host', 'your_database', 'your_username', and 'your_password' with your actual database connection details. Also, replace :problemId with the specific problem ID you want to retrieve.
-
-                        This code retrieves the JSON data from the database, parses it, and generates HTML content for displaying sample tests. You can customize the HTML structure as needed to match your design.
-
-
-
-
-
-
-
-
-                    </div>
-                </div><br/>
-
-            </div>
-            <hr>
-
-
-            <form method="post">
-                <label>
-                    <span>Language</span>
-                    <select name="language-id">
-                        <option value="43">GNU GCC C11 5.1.0</option>
-                        <option value="80">Clang++20 Diagnostics</option>
-                        <option value="52">Clang++17 Diagnostics</option>
-                        <option value="50">GNU G++14 6.4.0</option>
-                        <option value="54">GNU G++17 7.3.0</option>
-                        <option value="73">GNU G++20 11.2.0 (64 bit, winlibs)</option>
-                        <option value="59">Microsoft Visual C++ 2017</option>
-                        <option value="61">GNU G++17 9.2.0 (64 bit, msys 2)</option>
-                        <option value="65">C# 8, .NET Core 3.1</option>
-                        <option value="79">C# 10, .NET SDK 6.0</option>
-                        <option value="9">C# Mono 6.8</option>
-                        <option value="28">D DMD32 v2.105.0</option>
-                        <option value="32">Go 1.19.5</option>
-                        <option value="12">Haskell GHC 8.10.1</option>
-                        <option value="60">Java 11.0.6</option>
-                        <option value="74">Java 17 64bit</option>
-                        <option value="87">Java 21 64bit</option>
-                        <option value="36">Java 1.8.0_241</option>
-                        <option value="77">Kotlin 1.6.10</option>
-                        <option value="83">Kotlin 1.7.20</option>
-                        <option value="19">OCaml 4.02.1</option>
-                        <option value="3">Delphi 7</option>
-                        <option value="4">Free Pascal 3.0.2</option>
-                        <option value="51">PascalABC.NET 3.8.3</option>
-                        <option value="13">Perl 5.20.1</option>
-                        <option value="6">PHP 8.1.7</option>
-                        <option value="7">Python 2.7.18</option>
-                        <option value="31">Python 3.8.10</option>
-                        <option value="40">PyPy 2.7.13 (7.3.0)</option>
-                        <option value="41">PyPy 3.6.9 (7.3.0)</option>
-                        <option value="70">PyPy 3.9.10 (7.3.9, 64bit)</option>
-                        <option value="67">Ruby 3.2.2</option>
-                        <option value="75">Rust 1.72.0 (2021)</option>
-                        <option value="20">Scala 2.12.8</option>
-                        <option value="34">JavaScript V8 4.8.0</option>
-                        <option value="55">Node.js 12.16.3</option>
-                        <option value="14">ActiveTcl 8.5</option>
-                        <option value="15">Io-2008-01-07 (Win32)</option>
-                        <option value="17">Pike 7.8</option>
-                        <option value="18">Befunge</option>
-                        <option value="22">OpenCobol 1.0</option>
-                        <option value="25">Factor</option>
-                        <option value="26">Secret_171</option>
-                        <option value="27">Roco</option>
-                        <option value="33">Ada GNAT 4</option>
-                        <option value="38">Mysterious Language</option>
-                        <option value="39">FALSE</option>
-                        <option value="44">Picat 0.9</option>
-                        <option value="45">GNU C++11 5 ZIP</option>
-                        <option value="46">Java 8 ZIP</option>
-                        <option value="47">J</option>
-                        <option value="56">Microsoft Q#</option>
-                        <option value="57">Text</option>
-                        <option value="62">UnknownX</option>
-                        <option value="68">Secret 2021</option>
-                    </select>
-                </label>
-
-                <label for="source-code">
-                    <span>Source code</span>
-                    <textarea name="source-code" id="source-code" cols="30" rows="10"></textarea>
-                </label>
-
-                <button type="submit">Submit</button>
-            </form>
-
-        </div>
+      </div>
     </div>
-
-
-
-    <div class="container">
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <div class="col-md-4 d-flex align-items-center">
-                <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="#333" class="bi bi-xbox" viewBox="0 0 16 16">
-                        <path d="M7.202 15.967a7.987 7.987 0 0 1-3.552-1.26c-.898-.585-1.101-.826-1.101-1.306 0-.965 1.062-2.656 2.879-4.583C6.459 7.723 7.897 6.44 8.052 6.475c.302.068 2.718 2.423 3.622 3.531 1.43 1.753 2.088 3.189 1.754 3.829-.254.486-1.83 1.437-2.987 1.802-.954.301-2.207.429-3.239.33Zm-5.866-3.57C.589 11.253.212 10.127.03 8.497c-.06-.539-.038-.846.137-1.95.218-1.377 1.002-2.97 1.945-3.95.401-.417.437-.427.926-.263.595.2 1.23.638 2.213 1.528l.574.519-.313.385C4.056 6.553 2.52 9.086 1.94 10.653c-.315.852-.442 1.707-.306 2.063.091.24.007.15-.3-.319Zm13.101.195c.074-.36-.019-1.02-.238-1.687-.473-1.443-2.055-4.128-3.508-5.953l-.457-.575.494-.454c.646-.593 1.095-.948 1.58-1.25.381-.237.927-.448 1.161-.448.145 0 .654.528 1.065 1.104a8.372 8.372 0 0 1 1.343 3.102c.153.728.166 2.286.024 3.012a9.495 9.495 0 0 1-.6 1.893c-.179.393-.624 1.156-.82 1.404-.1.128-.1.127-.043-.148ZM7.335 1.952c-.67-.34-1.704-.705-2.276-.803a4.171 4.171 0 0 0-.759-.043c-.471.024-.45 0 .306-.358A7.778 7.778 0 0 1 6.47.128c.8-.169 2.306-.17 3.094-.005.85.18 1.853.552 2.418.9l.168.103-.385-.02c-.766-.038-1.88.27-3.078.853-.361.176-.676.316-.699.312a12.246 12.246 0 0 1-.654-.319Z"/>
-                    </svg><inline class="h5 p-2">judge</inline>
-                </a>
-                <span class="mb-3 mb-md-0 text-muted ">© 2022 Company, Inc</span>
+  </header>
+  <main class="relative w-full h-full sm:z-50">
+    <div
+      id="problem_text_area"
+      class="
+        absolute top-0 left-0
+        w-full h-full p-4
+        lg:flex lg:items-center lg:justify-between
+      "
+    >
+      <div class="min-w-0 flex-1r w-full h-full">
+        <nav class="hidden sm:flex" aria-label="Breadcrumb">
+          <ol role="list" class="flex items-center space-x-4">
+            <li>
+              <div class="flex">
+                <a href="/"><img src="/images/logo.svg" alt="Xjudge logo" class="inline w-6 h-auto"></a>
+              </div>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <!-- Heroicon name: mini/chevron-right -->
+                <svg class="h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                </svg>
+                <a href="/contests" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Contests</a>
+              </div>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <!-- Heroicon name: mini/chevron-right -->
+                <svg class="h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                </svg>
+                <a href="/contests/<?= $contest_id ?>" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"><?= $contest_name ?></a>
+              </div>
+            </li>
+          </ol>
+        </nav>
+        <article class="bg-white rounded-lg shadow-md mt-3 p-8 w-full">
+          <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">A. Name of the Problem Problem Problem Problem</h2>
+          <div class="mt-2 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6">
+            <div class="mt-2 flex items-center text-sm text-gray-500">
+              <!-- Heroicon name: mini/clock -->
+              <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+              </svg>
+              Time limit: <?= $time_limit ?>
             </div>
-
-            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-                <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
-                            <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
-                        </svg></use></svg></a></li>
-                <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
-                            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
-                        </svg></a></li>
-                <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-                        </svg></a></li>
-            </ul>
-        </footer>
-    </div>
-
-
-
+            <div class="mt-2 flex items-center text-sm text-gray-500">
+              <!-- Heroicon name: mini/map-pin -->
+              <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 1c3.866 0 7 1.79 7 4s-3.134 4-7 4-7-1.79-7-4 3.134-4 7-4zm5.694 8.13c.464-.264.91-.583 1.306-.952V10c0 2.21-3.134 4-7 4s-7-1.79-7-4V8.178c.396.37.842.688 1.306.953C5.838 10.006 7.854 10.5 10 10.5s4.162-.494 5.694-1.37zM3 13.179V15c0 2.21 3.134 4 7 4s7-1.79 7-4v-1.822c-.396.37-.842.688-1.306.953-1.532.875-3.548 1.369-5.694 1.369s-4.162-.494-5.694-1.37A7.009 7.009 0 013 13.179z" clip-rule="evenodd" />
+              </svg>
+              Memory limit: <?= $memory_limit ?>
+            </div>
+          </div>
+          <div class="mt-6 prose-sm sm:prose-xl">
+            <?= $statement ?>
+          </div>
+        </article>
+        <form class="bg-white rounded-lg shadow-md mt-3 p-8 w-full">
+          <!-- This example requires Tailwind CSS v2.0+ -->
+          <div>
+            <label for="language_id" class="block text-sm font-medium text-gray-700">Language</label>
+            <select id="language_id" name="language_id" class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+              <option value="c">C</option>
+              <option value="c++">C++</option>
+              <option value="java">Java</option>
+              <option value="kotlin">Kotlin</option>
+              <option value="python">Python</option>
+              <option value="rust">Rust</option>
+            </select>
+          </div>
+          <div class="mt-3">
+            <label for="source_code" class="block text-sm font-medium text-gray-700">Source code</label>
+            <div class="mt-1">
+              <textarea
+                rows="4" name="source_code" id="source_code"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-mono"></textarea>
+            </div>
+          </div>
+          <div class="mt-3 text-right">
+            <button type="submit"
+                    class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
 
     </div>
+    <!--    <div-->
+    <!--      id="editor_toggle"-->
+    <!--      aria-expanded="false"-->
+    <!--      aria-controls="editor_area"-->
+    <!--      class="-->
+    <!--        absolute top-1/2 bottom-1/2 left-auto right-0-->
+    <!--        transition-all duration-75 w-0 aria-expanded:w-32-->
+    <!--        z-20-->
+    <!--      "-->
+    <!--    >-->
+    <!--      <button-->
+    <!--        class="-->
+    <!--          absolute top-1/2 bottom-1/2 -left-8-->
+    <!--          bg-blue-900 h-16 w-16 rounded-full-->
+    <!--        "-->
+    <!--      >Open editor</button>-->
+    <!--    </div>-->
+    <!--    <div-->
+    <!--      id="editor_area"-->
+    <!--      class="-->
+    <!--        absolute top-0 right-0-->
+    <!--        bg-gray-500 text-white h-full-->
+    <!--        transition-all duration-75 w-0-->
+    <!--      "-->
+    <!--    >-->
+    <!--      <div>code editor</div>-->
+    <!--    </div>-->
+  </main>
+  <!--  <nav-->
+  <!--    id="problems_nav_mobile"-->
+  <!--    class="-->
+  <!--        sm:hidden absolute bottom-0-->
+  <!--        flex flex-col-->
+  <!--        w-full bg-white drop-shadow-[0_-1px_1px_rgb(0,0,0,0.1)]-->
+  <!--        z-20-->
+  <!--      "-->
+  <!--  >-->
+  <!--    <ol-->
+  <!--      id="problems_menu_mobile"-->
+  <!--      role="menu"-->
+  <!--      class="-->
+  <!--          overflow-auto-->
+  <!--          w-full mx-auto max-w-3xl space-y-1 px-2 sm:px-4 bg-inherit-->
+  <!--          transition-all duration-75 origin-bottom max-h-0-->
+  <!--        "-->
+  <!--    >-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="bg-indigo-50 text-indigo-600 block rounded-md py-2 px-3 text-base font-medium">A</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--      <li role="none"><a role="menuitem" href="#" class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium">B</a></li>-->
+  <!--    </ol>-->
+  <!--    <button-->
+  <!--      id="problems_menu_toggle"-->
+  <!--      aria-expanded="false"-->
+  <!--      aria-controls="problems_menu_mobile"-->
+  <!--      class="bg-inherit h-10"-->
+  <!--    >Problems</button>-->
+  <!--  </nav>-->
 
+  <script>
+    // const mobileProbMenu = document.getElementById("problems_menu_mobile");
+    // const mobileProbMenuToggle = document.getElementById("problems_menu_toggle");
+    // mobileProbMenuToggle.onclick = () => {
+    //   const expanded = mobileProbMenuToggle.getAttribute("aria-expanded") === true;
+    //   mobileProbMenuToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+    //
+    //   mobileProbMenu.classList.toggle("max-h-0");
+    //   mobileProbMenu.classList.toggle("max-h-80");
+    //   mobileProbMenu.classList.toggle("pt-2");
+    //   mobileProbMenu.classList.toggle("pb-3");
+    // };
 
+    const menu_container = document.getElementById("menu_container");
+    const menu = document.getElementById("menu");
+    const menu_expander_button = document.getElementById("menu_expander");
+    const menu_closer_button = document.getElementById("menu_closer");
+    menu_expander_button.onclick = () => {
+      menu_expander_button.setAttribute("aria-expanded", "true");
+      menu_container.classList.remove("hidden");
+      menu.classList.remove("hidden");
+      menu_container.classList.remove("-z-10");
+      menu_container.classList.add("z-30");
+    };
+    menu_closer_button.onclick = () => {
+      menu_expander_button.setAttribute("aria-expanded", "false");
+      menu_container.classList.add("hidden");
+      menu.classList.add("hidden");
+      menu_container.classList.add("-z-10");
+      menu_container.classList.remove("z-30");
+    };
 
-
-
-
-
-
-
-
-
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    // const editorArea = document.getElementById("editor_area");
+    // const editorToggleContainer = document.getElementById("editor_toggle");
+    // const editorToggle = editorToggleContainer.children[0];
+    // editorToggle.onclick = () => {
+    //   if (editorToggleContainer.getAttribute("aria-expanded") === "true") {
+    //     editorToggleContainer.setAttribute("aria-expanded", "false");
+    //     editorToggle.innerHTML = "Open editor";
+    //   } else {
+    //     editorToggleContainer.setAttribute("aria-expanded", "true");
+    //     editorToggle.innerHTML = "Close editor";
+    //   }
+    //
+    //   editorArea.classList.toggle("w-0");
+    //   editorArea.classList.toggle("w-32");
+    // };
+  </script>
 </body>
-
 </html>

@@ -28,6 +28,7 @@ $router->map_get('/contests/new', controller: 'contests/create.php');
 $router->map_post('/contests/new', controller: 'contests/store.php');
 $router->map_get('/contests', controller: 'contests/index.php');
 $router->map_get('/contests/:contest_id', controller: 'contests/show.php');
+$router->map_get('/contests/:contest_id/scoreboard', controller: 'contests/show_scoreboard.php');
 
 $router->map_get('/contests/:contest_id/problems', controller: 'problems/index.php');
 $router->map_get('/contests/:contest_id/problems/:problem_index', controller: 'problems/show.php');

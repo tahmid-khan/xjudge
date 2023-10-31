@@ -27,8 +27,8 @@ function store_problem_in_db(array $prob_parts): bool
 $name = $_POST['name'];
 $start_time = $_POST['start_time'];
 $end_time = $_POST['end_time'];
-$problem_ids = $_POST['problem_ids'];
-//$aliases = $_POST['aliases'];
+$problem_ids = $_POST['problem_codes'];
+$aliases = $_POST['aliases'];
 
 if (strtotime($start_time) >= strtotime($end_time)) {
     http_response_code(StatusCode::UNPROCESSABLE_CONTENT_422);
@@ -61,9 +61,9 @@ require 'codeforces.php';
 foreach ($problem_ids as $index => $prob_id) {
     if (problem_not_in_db($prob_id)) {
         $parts = scrape_codeforces_problem($prob_id);
-//        if ($aliases[$index]) {
-//            $parts['title'] = $aliases[$index];
-//        }
+        if ($aliases[$index]) {
+            $parts['title'] = $aliases[$index];
+        }
         if (!$parts) {
             http_response_code(StatusCode::UNPROCESSABLE_CONTENT_422);
             $errors = ['problem_ids' => "Problem $prob_id does not exist"];
