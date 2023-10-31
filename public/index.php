@@ -21,6 +21,7 @@ $router->map_post('/profile', controller: 'accounts/update.php');
 
 $router->map_get('/login', controller: 'sessions/create.php');
 $router->map_post('/login', controller: 'sessions/store.php');
+$router->map_get('/login/google-callback', controller: 'sessions/store_google.php');
 $router->map_get('/logout', controller: 'sessions/destroy.php');
 
 $router->map_get('/contests/new', controller: 'contests/create.php');
