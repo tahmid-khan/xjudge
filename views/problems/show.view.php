@@ -218,17 +218,17 @@
             <?= $statement ?>
           </div>
         </article>
-        <form class="bg-white rounded-lg shadow-md mt-3 p-8 w-full">
+        <form class="bg-white rounded-lg shadow-md mt-3 p-8 w-full" method="post">
           <!-- This example requires Tailwind CSS v2.0+ -->
           <div>
             <label for="language_id" class="block text-sm font-medium text-gray-700">Language</label>
             <select id="language_id" name="language_id" class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-              <option value="c">C</option>
-              <option value="c++">C++</option>
-              <option value="java">Java</option>
-              <option value="kotlin">Kotlin</option>
-              <option value="python">Python</option>
-              <option value="rust">Rust</option>
+              <option value="43">C</option>
+              <option value="73">C++</option>
+              <option value="87">Java</option>
+              <option value="83">Kotlin</option>
+              <option value="70">Python</option>
+              <option value="75">Rust</option>
             </select>
           </div>
           <div class="mt-3">

@@ -85,16 +85,16 @@ function write_code_and_submit(Page $page, string $problem_id, string $language_
             const verdictElement = document.querySelector(".submissionVerdictWrapper");
             return {
               "submission_id": verdictElement.getAttribute("submissionId"),
-              "verdict_type": verdictElement.getAttribute("submissionVerdict"),
-              "verdict": verdictElement.innerText
+              "verdict": verdictElement.getAttribute("submissionVerdict"),
+              "detailed_verdict": verdictElement.innerText
             };'
         )
     );
 }
 
 extract($route_params);
-$language_id = $_POST['language-id'];
-$source_code = $_POST['source-code'];
+$language_id = $_POST['language_id'];
+$source_code = $_POST['source_code'];
 
 require BASE_PATH . 'Database.php';
 $db = connect_db();
@@ -108,12 +108,17 @@ $browser = $puppeteer->launch(['headless' => false]);
 $page = $browser->newPage();
 goto_submit_page($page);
 $result = write_code_and_submit($page, $problem_id, $language_id, $source_code);
+if ($result['verdict'] === 'COMPILATION_ERROR') {
+    $result['verdict'] = 'CE';
+} elseif ($result['verdict'] === 'OK') {
+    $result['verdict'] = 'AC';
+}
 $submission_id = $result['submission_id'];
 dump($result);
 
 $db->query(
-    'INSERT INTO submission (id, submitter_id, contest_id, problem_index, language_id, source_code, verdict_type, verdict)
-    VALUES (:id, :submitter_id, :contest_id, :problem_index, :language_id, :source_code, :verdict_type, :verdict)',
+    'INSERT INTO submission (id, user_id, contest_id, problem_index, language_id, source_code, verdict, detailed_verdict)
+    VALUES (:id, :submitter_id, :contest_id, :problem_index, :language_id, :source_code, :verdict, :detailed_verdict)',
     [
         'id' => $submission_id,
         'submitter_id' => $_SESSION['user_id'],
@@ -121,8 +126,8 @@ $db->query(
         'problem_index' => $problem_index,
         'language_id' => $language_id,
         'source_code' => $source_code,
-        'verdict_type' => $result['verdict_type'],
-        'verdict' => $result['verdict']
+        'verdict' => $result['verdict'],
+        'detailed_verdict' => $result['detailed_verdict']
     ]
 );
 
