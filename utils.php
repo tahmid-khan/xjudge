@@ -13,34 +13,22 @@ function dd($value): void
     die();
 }
 
-function base_path(string $base_relative_path): string
-{
-    return BASE_PATH . $base_relative_path;
-}
+//function base_path(string $base_relative_path): string
+//{
+//    return BASE_PATH . $base_relative_path;
+//}
 
-function view(string $path, array $view_data = []): void
-{
-    extract($view_data);
-    require 'views/' . $path;
-}
+//function view(string $path, array $view_data = []): void
+//{
+//    extract($view_data);
+//    require BASE_PATH . 'views/' . $path;
+//}
 
 function abort(int $response_code): void
 {
     http_response_code($response_code);
-    view("$response_code.php");
+    require "views/$response_code.php";
     die();
-}
-
-function connect_db(): Database
-{
-    require 'Database.php';
-    $config = require 'config.php';
-    return new Database($config['database']);
-}
-
-function html_to_sql_time(string $html_datetime): string
-{
-    return str_replace('T', ' ', $html_datetime);
 }
 
 function require_auth(string $message, string $redirect_path = '/login'): void
