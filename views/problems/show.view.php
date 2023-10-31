@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Problem A</title>
+  <title>Problem <?= $problem_index ?> &mdash; <?= $contest_name ?></title>
   <meta name="description" content="<?= $page_descr
       ?? 'Xjudge is a virtual judge system and contest hosting platform for algorithmic programming contests.' ?>">
 

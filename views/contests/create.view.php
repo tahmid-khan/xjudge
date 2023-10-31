@@ -25,14 +25,20 @@ require BASE_PATH . 'views/partials/banner.php';
                         <div class="sm:col-span-3">
                             <label for="start_time" class="block text-sm font-medium text-gray-700">Start time</label>
                             <div class="mt-1">
-                                <input id="start_time" type="datetime-local" name="start_time" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                                <input id="start_time" type="datetime-local" name="start_time" class="block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm <?= isset($errors['start_time']) ? 'border-2 border-red-400 focus:border-red-500' : 'border border-gray-300 focus:border-indigo-500' ?>" required>
+                                <?php if (isset($errors['start_time'])) : ?>
+                                    <p class="mt-2 text-sm text-red-600"><?= $errors['start_time'] ?></p>
+                                <?php endif; ?>
                             </div>
                         </div>
 
                         <div class="sm:col-span-3">
                             <label for="end_time" class="block text-sm font-medium text-gray-700">End time</label>
                             <div class="mt-1">
-                                <input id="end_time" type="datetime-local" name="end_time" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input id="end_time" type="datetime-local" name="end_time" class="block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm <?= isset($errors['end_time']) ? 'border-2 border-red-400 focus:border-red-500' : 'border border-gray-300 focus:border-indigo-500' ?>">
+                                <?php if (isset($errors['end_time'])) : ?>
+                                  <p class="mt-2 text-sm text-red-600"><?= $errors['end_time'] ?></p>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -42,6 +48,9 @@ require BASE_PATH . 'views/partials/banner.php';
                     <div>
                         <h3 class="text-lg font-medium leading-6 text-gray-900">Problems</h3>
                         <p class="mt-1 text-sm text-gray-500">Read the <a href="/help" class="underline hover:no-underline text-indigo-600">help page</a> to learn how to specify problem IDs.</p>
+                        <?php if (isset($errors['problem_codes'])) : ?>
+                            <p class="mt-2 text-sm text-red-600"><?= $errors['problem_codes'] ?></p>
+                        <?php endif; ?>
                     </div>
                     <div class="mt-6">
                         <ol id="problem-code-inputs">
