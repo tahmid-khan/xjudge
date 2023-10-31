@@ -1,5 +1,8 @@
 <?php
 
+use voku\helper\HtmlDomParser;
+use voku\helper\SimpleHtmlDomInterface;
+
 require_auth('You must be logged in to access this page.');
 
 global $db;
