@@ -1,4 +1,4 @@
-# Xjudge
+# [Xjudge](https://github.com/tahmid-khan/xjudge)
 
 ## Instructions for running locally
 
@@ -16,7 +16,7 @@ composer install
 ```
 to install the necessary PHP packages.
 
-3. Update your local MySQL/MariaDB server's credentials in `config.php`, and run `schema.sql` in MySQL/MariaDB to create the database.
+3. Update your local MySQL/MariaDB server's credentials in `config.php` and run `schema.sql` in your local MySQL/MariaDB server to create the database schema and integrate the database with the application.
 
 4. To start a PHP server, assuming PHP is in `PATH`, run the following from the project root:
 ```bash
