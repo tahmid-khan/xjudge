@@ -82,9 +82,10 @@ function scrape_codeforces_problem(string $prob_id): false|array
     $dom = $dom->findOneOrFalse('.sample-tests') ?? null;
     $samples = '';
     $pre_elems = $dom?->findMultiOrFalse('pre');
+//    dump($pre_elems);
     for ($i = 0; $i < count($pre_elems); $i += 2) {
-        $input = extract_sample_text($pre_elems[$i]);
-        $output = extract_sample_text($pre_elems[$i + 1]);
+        $input = $pre_elems[$i]->text();
+        $output = $pre_elems[$i + 1]->text();
         $samples .= "\t<li>$input$output</li>\n";
     }
 
